@@ -1,0 +1,684 @@
+meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>성인용 그림사전 - 병원편 (Hospital Visual Dictionary)</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- FontAwesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Google Fonts (Inter & Noto Sans KR) -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Noto+Sans+KR:wght@400;500;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Noto Sans KR', 'Inter', sans-serif;
+            background-color: #f0f4f8;
+        }
+        
+        /* Custom Hotspot Animations */
+        @keyframes pulse-ring {
+            0% { transform: scale(0.95); opacity: 0.8; }
+            50% { transform: scale(1.15); opacity: 0.4; }
+            100% { transform: scale(0.95); opacity: 0.8; }
+        }
+        .hotspot-pulse {
+            animation: pulse-ring 2s infinite ease-in-out;
+        }
+        
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar {
+            width: 6px;
+            height: 6px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #f1f5f9;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #cbd5e1;
+            border-radius: 4px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #94a3b8;
+        }
+
+        .svg-canvas {
+            user-select: none;
+            -webkit-user-select: none;
+        }
+    </style>
+</head>
+<body class="h-screen flex flex-col overflow-hidden text-slate-800">
+
+    <!-- Top Navigation Bar -->
+    <header class="bg-white border-b border-slate-200 px-4 py-3 flex justify-between items-center z-20 shadow-sm flex-shrink-0">
+        <div class="flex items-center space-x-3">
+            <div class="bg-blue-600 text-white p-2.5 rounded-xl shadow-md shadow-blue-200">
+                <i class="fa-solid font-bold fa-hospital-user text-xl"></i>
+            </div>
+            <div>
+                <h1 class="font-bold text-lg leading-tight text-slate-900">성인 그림사전 <span class="text-xs bg-blue-100 text-blue-700 px-2 py-0.5 rounded-full font-semibold ml-1">병원 (Hospital)</span></h1>
+                <p class="text-xs text-slate-500">그림을 클릭하거나 리스트에서 단어를 선택해 발음을 들어보세요.</p>
+            </div>
+        </div>
+        
+        <!-- Navigation Tabs -->
+        <div class="flex items-center space-x-2 bg-slate-100 p-1 rounded-xl">
+            <button id="tab-explore" onclick="switchTab('explore')" class="px-4 py-1.5 rounded-lg text-sm font-semibold transition-all bg-white text-blue-700 shadow-sm">
+                <i class="fa-solid fa-compass mr-1.5"></i>탐색하기
+            </button>
+            <button id="tab-list" onclick="switchTab('list')" class="px-4 py-1.5 rounded-lg text-sm font-semibold transition-all text-slate-600 hover:text-slate-900">
+                <i class="fa-solid fa-book-open mr-1.5"></i>단어장
+            </button>
+            <button id="tab-quiz" onclick="switchTab('quiz')" class="px-4 py-1.5 rounded-lg text-sm font-semibold transition-all text-slate-600 hover:text-slate-900">
+                <i class="fa-solid fa-graduation-cap mr-1.5"></i>퀴즈
+            </button>
+        </div>
+    </header>
+
+    <!-- Main Container -->
+    <div class="flex-1 flex overflow-hidden relative">
+
+        <!-- EXPLORE TAB (Interactive Scene Canvas) -->
+        <main id="view-explore" class="flex-1 flex flex-col md:flex-row h-full overflow-hidden w-full">
+            <!-- Scene Canvas Area -->
+            <div class="flex-1 relative bg-slate-200 flex items-center justify-center p-2 md:p-4 overflow-auto">
+                <div class="relative max-w-5xl w-full aspect-[16/9] bg-white rounded-2xl shadow-xl overflow-hidden border border-slate-300 flex items-center justify-center">
+                    
+                    <!-- SVG Illustration Canvas representing Hospital Scene -->
+                    <svg class="w-full h-full svg-canvas" viewBox="0 0 1000 562.5" preserveAspectRatio="xMidYMid meet" xmlns="http://www.w3.org/2000/svg">
+                        <defs>
+                            <linearGradient id="wallGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+                                <stop offset="0%" stop-color="#e2e8f0"/>
+                                <stop offset="100%" stop-color="#cbd5e1"/>
+                            </linearGradient>
+                            <linearGradient id="floorGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+                                <stop offset="0%" stop-color="#94a3b8"/>
+                                <stop offset="100%" stop-color="#64748b"/>
+                            </linearGradient>
+                            <filter id="shadow" x="-10%" y="-10%" width="120%" height="120%">
+                                <feDropShadow dx="0" dy="4" stdDeviation="4" flood-opacity="0.15"/>
+                            </filter>
+                        </defs>
+
+                        <!-- Hospital Background Wall & Corridor -->
+                        <rect x="0" y="0" width="1000" height="420" fill="url(#wallGrad)" />
+                        <rect x="0" y="420" width="1000" height="142.5" fill="url(#floorGrad)" />
+                        <line x1="0" y1="420" x2="1000" y2="420" stroke="#475569" stroke-width="3"/>
+
+                        <!-- Ward Partition Curtains & Windows -->
+                        <rect x="30" y="30" width="180" height="200" rx="8" fill="#e0f2fe" stroke="#bae6fd" stroke-width="4"/>
+                        <line x1="120" y1="30" x2="120" y2="230" stroke="#bae6fd" stroke-width="3"/>
+                        <path d="M 0 20 L 300 20 L 300 380 L 0 380" fill="none" stroke="#93c5fd" stroke-width="3" stroke-dasharray="6,6"/>
+
+                        <!-- Nurse Station Counter -->
+                        <path d="M 380 280 L 620 280 L 620 440 L 380 440 Z" fill="#ffffff" stroke="#cbd5e1" stroke-width="4" filter="url(#shadow)"/>
+                        <rect x="400" y="260" width="200" height="25" rx="5" fill="#0284c7"/>
+                        <text x="500" y="277" font-size="12" fill="#ffffff" font-weight="bold" text-anchor="middle">간호사 스테이션 (Nurse Station)</text>
+
+                        <!-- Doctor / Patient Room Sign -->
+                        <rect x="750" y="40" width="120" height="50" rx="6" fill="#1e293b"/>
+                        <text x="810" y="65" font-size="14" fill="#38bdf8" font-weight="bold" text-anchor="middle">입원실 501</text>
+                        <text x="810" y="80" font-size="10" fill="#94a3b8" text-anchor="middle">WARD 501</text>
+
+                        <!-- Hospital Beds & Patients (Stylized Vector Elements) -->
+                        <g id="scene-objects">
+                            <!-- Ward Bed & Patient -->
+                            <rect x="50" y="280" width="220" height="100" rx="10" fill="#f8fafc" stroke="#94a3b8" stroke-width="3" filter="url(#shadow)"/>
+                            <rect x="60" y="260" width="50" height="40" rx="5" fill="#38bdf8"/>
+                            <!-- Patient head -->
+                            <circle cx="85" cy="270" r="18" fill="#fbcfe8"/>
+                            <rect x="110" y="290" width="150" height="80" rx="5" fill="#bfdbfe"/>
+
+                            <!-- Vital Signs Monitor -->
+                            <rect x="40" y="160" width="70" height="60" rx="6" fill="#0f172a" stroke="#334155" stroke-width="3"/>
+                            <path d="M 45 190 Q 55 170 65 190 T 85 190 T 100 190" fill="none" stroke="#22c55e" stroke-width="2"/>
+
+                            <!-- IV Drip Pole -->
+                            <line x1="280" y1="150" x2="280" y2="380" stroke="#64748b" stroke-width="4"/>
+                            <rect x="270" y="150" width="20" height="35" rx="4" fill="#e0f2fe" stroke="#38bdf8" stroke-width="2"/>
+                            
+                            <!-- X-ray Viewer Screen -->
+                            <rect x="730" y="150" width="140" height="100" rx="4" fill="#0284c7" stroke="#0369a1" stroke-width="4" filter="url(#shadow)"/>
+                            <!-- X-ray Ribs Graphic -->
+                            <path d="M 780 180 Q 800 170 820 180 M 775 195 Q 800 185 825 195 M 780 210 Q 800 200 820 210" fill="none" stroke="#ffffff" stroke-width="4" stroke-linecap="round" opacity="0.8"/>
+
+                            <!-- Medical Cart -->
+                            <rect x="320" y="380" width="80" height="70" rx="6" fill="#e2e8f0" stroke="#94a3b8" stroke-width="3"/>
+                            <circle cx="330" cy="455" r="8" fill="#475569"/>
+                            <circle cx="390" cy="455" r="8" fill="#475569"/>
+                            <rect x="330" y="390" width="20" height="15" rx="2" fill="#ef4444"/>
+                            <rect x="355" y="390" width="20" height="15" rx="2" fill="#3b82f6"/>
+
+                            <!-- Doctors & Nurses Representations (Color-coded SVG Blocks) -->
+                            <!-- Specialist Doctor (Left Standing) -->
+                            <g transform="translate(180, 200)">
+                                <circle cx="30" cy="20" r="16" fill="#fde047"/> <!-- Head -->
+                                <path d="M 10 40 L 50 40 L 45 130 L 15 130 Z" fill="#ffffff" stroke="#cbd5e1" stroke-width="2"/> <!-- White Coat -->
+                                <path d="M 22 40 L 38 40 L 38 90 L 22 90 Z" fill="#0284c7"/> <!-- Inner Blue Scrub -->
+                                <!-- Stethoscope -->
+                                <path d="M 20 45 Q 30 65 40 45" fill="none" stroke="#334155" stroke-width="3"/>
+                            </g>
+
+                            <!-- Chief Doctor (Right standing next to X-ray) -->
+                            <g transform="translate(860, 210)">
+                                <circle cx="30" cy="20" r="16" fill="#fca5a5"/>
+                                <path d="M 10 40 L 50 40 L 45 130 L 15 130 Z" fill="#ffffff" stroke="#cbd5e1" stroke-width="2"/>
+                                <path d="M 20 40 L 40 40 L 35 110 L 25 110 Z" fill="#1e293b"/>
+                            </g>
+
+                            <!-- Nurse 1 (Center near desk) -->
+                            <g transform="translate(520, 230)">
+                                <circle cx="25" cy="20" r="15" fill="#fed7aa"/>
+                                <path d="M 5 40 L 45 40 L 40 120 L 10 120 Z" fill="#0d9488"/> <!-- Teal Scrub -->
+                            </g>
+
+                            <!-- Nurse 2 (Walking right) -->
+                            <g transform="translate(650, 260)">
+                                <circle cx="25" cy="20" r="15" fill="#fbcfe8"/>
+                                <path d="M 5 40 L 45 40 L 40 120 L 10 120 Z" fill="#0d9488"/>
+                            </g>
+                        </g>
+
+                        <!-- Clickable Interactive Hotspot Overlay Elements -->
+                        <!-- 1. Doctor (의사) -->
+                        <g class="cursor-pointer group" onclick="selectItem('doctor')">
+                            <circle cx="210" cy="240" r="28" fill="#2563eb" fill-opacity="0.2" class="hotspot-pulse"/>
+                            <circle cx="210" cy="240" r="16" fill="#2563eb" class="group-hover:scale-110 transition-transform"/>
+                            <text x="210" y="245" font-size="12" fill="#ffffff" text-anchor="middle" font-weight="bold"><tspan class="fa">&#xf0f0;</tspan></text>
+                        </g>
+
+                        <!-- 2. Nurse (간호사) -->
+                        <g class="cursor-pointer group" onclick="selectItem('nurse')">
+                            <circle cx="545" cy="270" r="28" fill="#0d9488" fill-opacity="0.2" class="hotspot-pulse"/>
+                            <circle cx="545" cy="270" r="16" fill="#0d9488" class="group-hover:scale-110 transition-transform"/>
+                            <text x="545" y="275" font-size="12" fill="#ffffff" text-anchor="middle" font-weight="bold"><tspan class="fa">&#xf4f2;</tspan></text>
+                        </g>
+
+                        <!-- 3. Patient (환자) -->
+                        <g class="cursor-pointer group" onclick="selectItem('patient')">
+                            <circle cx="130" cy="300" r="28" fill="#e11d48" fill-opacity="0.2" class="hotspot-pulse"/>
+                            <circle cx="130" cy="300" r="16" fill="#e11d48" class="group-hover:scale-110 transition-transform"/>
+                            <text x="130" y="305" font-size="12" fill="#ffffff" text-anchor="middle" font-weight="bold"><tspan class="fa">&#xf236;</tspan></text>
+                        </g>
+
+                        <!-- 4. Specialist (전문의) -->
+                        <g class="cursor-pointer group" onclick="selectItem('specialist')">
+                            <circle cx="890" cy="250" r="28" fill="#4f46e5" fill-opacity="0.2" class="hotspot-pulse"/>
+                            <circle cx="890" cy="250" r="16" fill="#4f46e5" class="group-hover:scale-110 transition-transform"/>
+                            <text x="890" y="255" font-size="12" fill="#ffffff" text-anchor="middle" font-weight="bold"><tspan class="fa">&#xf51e;</tspan></text>
+                        </g>
+
+                        <!-- 5. Nurse Station (간호사 스테이션) -->
+                        <g class="cursor-pointer group" onclick="selectItem('nurse_station')">
+                            <circle cx="430" cy="330" r="28" fill="#0284c7" fill-opacity="0.2" class="hotspot-pulse"/>
+                            <circle cx="430" cy="330" r="16" fill="#0284c7" class="group-hover:scale-110 transition-transform"/>
+                            <text x="430" y="335" font-size="12" fill="#ffffff" text-anchor="middle" font-weight="bold"><tspan class="fa">&#xf46d;</tspan></text>
+                        </g>
+
+                        <!-- 6. X-Ray (X-레이) -->
+                        <g class="cursor-pointer group" onclick="selectItem('xray')">
+                            <circle cx="800" cy="190" r="28" fill="#d97706" fill-opacity="0.2" class="hotspot-pulse"/>
+                            <circle cx="800" cy="190" r="16" fill="#d97706" class="group-hover:scale-110 transition-transform"/>
+                            <text x="800" y="195" font-size="12" fill="#ffffff" text-anchor="middle" font-weight="bold"><tspan class="fa">&#xf188;</tspan></text>
+                        </g>
+
+                        <!-- 7. Vital Signs Monitor (활력징후 모니터) -->
+                        <g class="cursor-pointer group" onclick="selectItem('vital_monitor')">
+                            <circle cx="75" cy="180" r="28" fill="#16a34a" fill-opacity="0.2" class="hotspot-pulse"/>
+                            <circle cx="75" cy="180" r="16" fill="#16a34a" class="group-hover:scale-110 transition-transform"/>
+                            <text x="75" y="185" font-size="12" fill="#ffffff" text-anchor="middle" font-weight="bold"><tspan class="fa">&#xf21e;</tspan></text>
+                        </g>
+
+                        <!-- 8. IV Drip (수액 / 링거) -->
+                        <g class="cursor-pointer group" onclick="selectItem('iv_drip')">
+                            <circle cx="280" cy="180" r="28" fill="#0284c7" fill-opacity="0.2" class="hotspot-pulse"/>
+                            <circle cx="280" cy="180" r="16" fill="#0284c7" class="group-hover:scale-110 transition-transform"/>
+                            <text x="280" y="185" font-size="12" fill="#ffffff" text-anchor="middle" font-weight="bold"><tspan class="fa">&#xf48b;</tspan></text>
+                        </g>
+
+                        <!-- 9. Medical Supplies Cart (의료 카트) -->
+                        <g class="cursor-pointer group" onclick="selectItem('medical_cart')">
+                            <circle cx="360" cy="410" r="28" fill="#7c3aed" fill-opacity="0.2" class="hotspot-pulse"/>
+                            <circle cx="360" cy="410" r="16" fill="#7c3aed" class="group-hover:scale-110 transition-transform"/>
+                            <text x="360" y="415" font-size="12" fill="#ffffff" text-anchor="middle" font-weight="bold"><tspan class="fa">&#xf217;</tspan></text>
+                        </g>
+
+                        <!-- 10. Ward / Patient Room (입원실) -->
+                        <g class="cursor-pointer group" onclick="selectItem('ward')">
+                            <circle cx="810" cy="65" r="28" fill="#64748b" fill-opacity="0.2" class="hotspot-pulse"/>
+                            <circle cx="810" cy="65" r="16" fill="#64748b" class="group-hover:scale-110 transition-transform"/>
+                            <text x="810" y="70" font-size="12" fill="#ffffff" text-anchor="middle" font-weight="bold"><tspan class="fa">&#xf0f8;</tspan></text>
+                        </g>
+                    </svg>
+
+                    <!-- Hint Overlay -->
+                    <div class="absolute bottom-3 left-3 bg-slate-900/80 backdrop-blur-sm text-white px-3 py-1.5 rounded-lg text-xs flex items-center space-x-2">
+                        <i class="fa-solid fa-hand-pointer text-amber-400"></i>
+                        <span>반짝이는 아이콘을 클릭하면 단어가 나타납니다.</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Selected Word Detail Panel Side-Drawer -->
+            <div id="detail-card" class="w-full md:w-80 bg-white border-t md:border-t-0 md:border-l border-slate-200 p-5 flex flex-col justify-between shadow-lg flex-shrink-0">
+                <div id="detail-content" class="h-full flex flex-col">
+                    <div class="flex-1 flex flex-col justify-center items-center text-center p-4" id="placeholder-state">
+                        <div class="w-16 h-16 bg-blue-50 text-blue-500 rounded-full flex items-center justify-center text-2xl mb-3">
+                            <i class="fa-solid fa-arrow-pointer"></i>
+                        </div>
+                        <h3 class="font-bold text-slate-700 mb-1">단어를 선택해보세요</h3>
+                        <p class="text-xs text-slate-500 max-w-[200px]">그림 속 아이콘을 클릭하여 한글 및 영어 표현과 정확한 발음을 들어보세요.</p>
+                    </div>
+
+                    <!-- Active Word Content (Initially Hidden) -->
+                    <div id="word-info" class="hidden flex-1 flex flex-col">
+                        <!-- Category Badge -->
+                        <div class="mb-3">
+                            <span id="word-category" class="text-xs font-semibold px-2.5 py-1 bg-blue-100 text-blue-700 rounded-full">의료진</span>
+                        </div>
+
+                        <!-- Korean Word -->
+                        <div class="mb-4">
+                            <span class="text-xs text-slate-400 font-medium block mb-1">한국어 (Korean)</span>
+                            <div class="flex items-center justify-between">
+                                <h2 id="word-ko" class="text-2xl font-bold text-slate-900">의사</h2>
+                                <button onclick="speakCurrent('ko')" class="w-10 h-10 bg-blue-600 hover:bg-blue-700 active:scale-95 text-white rounded-xl flex items-center justify-center shadow-md transition-all">
+                                    <i class="fa-solid fa-volume-high text-lg"></i>
+                                </button>
+                            </div>
+                            <p id="word-roman" class="text-sm text-slate-500 mt-1 italic">[ ui-sa ]</p>
+                        </div>
+
+                        <hr class="border-slate-100 my-3">
+
+                        <!-- English Word -->
+                        <div class="mb-4">
+                            <span class="text-xs text-slate-400 font-medium block mb-1">영어 (English)</span>
+                            <div class="flex items-center justify-between">
+                                <h3 id="word-en" class="text-xl font-bold text-slate-800">Doctor</h3>
+                                <button onclick="speakCurrent('en')" class="w-9 h-9 bg-slate-100 hover:bg-slate-200 active:scale-95 text-slate-700 rounded-xl flex items-center justify-center transition-all">
+                                    <i class="fa-solid fa-volume-low text-md"></i>
+                                </button>
+                            </div>
+                        </div>
+
+                        <!-- Example Sentence -->
+                        <div class="mt-auto bg-slate-50 p-3.5 rounded-xl border border-slate-100">
+                            <span class="text-xs font-bold text-slate-500 block mb-1">
+                                <i class="fa-solid fa-quote-left mr-1 text-blue-400"></i>예문 (Example)
+                            </span>
+                            <p id="word-ex-ko" class="text-sm text-slate-800 font-medium mb-1">의사 선생님이 환자를 진료합니다.</p>
+                            <p id="word-ex-en" class="text-xs text-slate-500">The doctor is examining the patient.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+
+        <!-- LIST TAB (Vocabulary List) -->
+        <main id="view-list" class="hidden flex-1 p-4 md:p-8 overflow-y-auto w-full max-w-5xl mx-auto">
+            <div class="mb-6 flex flex-col md:flex-row md:items-center justify-between gap-4">
+                <div>
+                    <h2 class="text-2xl font-bold text-slate-900">병원 관련 필수 단어 목록</h2>
+                    <p class="text-sm text-slate-500">병원에서 가장 자주 쓰이는 단어를 한눈에 모아보세요.</p>
+                </div>
+                <!-- Search Input -->
+                <div class="relative w-full md:w-72">
+                    <i class="fa-solid fa-magnifying-glass absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400"></i>
+                    <input type="text" id="search-input" oninput="filterWords()" placeholder="단어 검색 (한글/영어)..." class="w-full pl-10 pr-4 py-2.5 bg-white border border-slate-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 shadow-sm">
+                </div>
+            </div>
+
+            <!-- Vocabulary Cards Grid -->
+            <div id="vocab-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                <!-- Cards will be dynamically injected here -->
+            </div>
+        </main>
+
+        <!-- QUIZ TAB (Interactive Flashcards / Practice Mode) -->
+        <main id="view-quiz" class="hidden flex-1 p-4 md:p-8 overflow-y-auto w-full max-w-3xl mx-auto flex flex-col items-center justify-center">
+            <div class="w-full bg-white rounded-2xl p-6 md:p-8 shadow-xl border border-slate-200">
+                <!-- Quiz Header -->
+                <div class="flex justify-between items-center mb-6">
+                    <span class="text-xs font-bold text-blue-600 bg-blue-50 px-3 py-1 rounded-full uppercase tracking-wider">Hospital Vocabulary Quiz</span>
+                    <span id="quiz-progress" class="text-sm font-semibold text-slate-500">문제 1 / 10</span>
+                </div>
+
+                <!-- Question Prompt -->
+                <div class="text-center my-6">
+                    <span class="text-xs text-slate-400 font-medium uppercase tracking-wide">다음 이미지/영어에 알맞은 한글 단어는?</span>
+                    <h3 id="quiz-question" class="text-3xl font-extrabold text-slate-900 mt-2 mb-1">Doctor</h3>
+                    <p id="quiz-hint" class="text-sm text-slate-500">힌트: 병원에서 환자를 진료하는 사람</p>
+                    <button onclick="speakQuizWord()" class="mt-3 inline-flex items-center space-x-1.5 px-3 py-1.5 bg-slate-100 hover:bg-slate-200 text-slate-700 rounded-lg text-xs font-semibold transition-all">
+                        <i class="fa-solid fa-volume-high"></i>
+                        <span>발음 듣기</span>
+                    </button>
+                </div>
+
+                <!-- Answer Choices Grid -->
+                <div id="quiz-options" class="grid grid-cols-1 sm:grid-cols-2 gap-3 my-6">
+                    <!-- Dynamic option buttons -->
+                </div>
+
+                <!-- Quiz Score & Controls -->
+                <div class="flex justify-between items-center pt-4 border-t border-slate-100">
+                    <div class="text-sm text-slate-600">
+                        점수: <span id="quiz-score" class="font-bold text-blue-600">0</span> / 10
+                    </div>
+                    <button onclick="nextQuizQuestion()" id="next-btn" class="px-5 py-2.5 bg-blue-600 hover:bg-blue-700 active:scale-95 text-white font-semibold rounded-xl text-sm transition-all shadow-md">
+                        다음 문제 <i class="fa-solid fa-arrow-right ml-1"></i>
+                    </button>
+                </div>
+            </div>
+        </main>
+
+    </div>
+
+    <script>
+        // Dictionary Master Data
+        const dictionaryData = [
+            {
+                id: "doctor",
+                ko: "의사",
+                en: "Doctor",
+                roman: "ui-sa",
+                category: "의료진",
+                icon: "fa-user-doctor",
+                exKo: "의사 선생님이 환자를 진료합니다.",
+                exEn: "The doctor is examining the patient."
+            },
+            {
+                id: "nurse",
+                ko: "간호사",
+                en: "Nurse",
+                roman: "gan-ho-sa",
+                category: "의료진",
+                icon: "fa-user-nurse",
+                exKo: "간호사가 환자의 체온을 측정합니다.",
+                exEn: "The nurse measures the patient's temperature."
+            },
+            {
+                id: "patient",
+                ko: "환자",
+                en: "Patient",
+                roman: "hwan-ja",
+                category: "진료 대상",
+                icon: "fa-bed-pulse",
+                exKo: "환자가 침대에서 휴식을 취하고 있습니다.",
+                exEn: "The patient is resting in bed."
+            },
+            {
+                id: "specialist",
+                ko: "전문의",
+                en: "Medical Specialist",
+                roman: "jeon-mun-ui",
+                category: "의료진",
+                icon: "fa-user-md",
+                exKo: "전문의에게 정밀 검사를 받았습니다.",
+                exEn: "I received a detailed examination from a specialist."
+            },
+            {
+                id: "nurse_station",
+                ko: "간호사 스테이션",
+                en: "Nurse Station",
+                roman: "gan-ho-sa su-tei-syeon",
+                category: "병원 시설",
+                icon: "fa-hospital-user",
+                exKo: "문의 사항은 간호사 스테이션에 말씀해 주세요.",
+                exEn: "Please direct your inquiries to the nurse station."
+            },
+            {
+                id: "xray",
+                ko: "X-레이 검사",
+                en: "X-Ray Examination",
+                roman: "ek-seu-re-i geom-sa",
+                category: "검사 장비",
+                icon: "fa-x-ray",
+                exKo: "흉부 X-레이 사진을 촬영했습니다.",
+                exEn: "A chest X-ray photo was taken."
+            },
+            {
+                id: "vital_monitor",
+                ko: "활력 징후 모니터",
+                en: "Vital Signs Monitor",
+                roman: "hwal-ryeok jing-hu mo-ni-teo",
+                category: "의료 장비",
+                icon: "fa-heart-pulse",
+                exKo: "모니터가 환자의 심장 박동을 표시합니다.",
+                exEn: "The monitor displays the patient's heartbeat."
+            },
+            {
+                id: "iv_drip",
+                ko: "수액 (링거)",
+                en: "IV Drip / Saline",
+                roman: "su-aek",
+                category: "의료 용품",
+                icon: "fa-square-plus",
+                exKo: "탈수 증상 완화를 위해 수액을 맞고 있습니다.",
+                exEn: "An IV drip is administered to relieve dehydration symptoms."
+            },
+            {
+                id: "medical_cart",
+                ko: "의료 카트",
+                en: "Medical Cart",
+                roman: "ui-ryeo ka-teu",
+                category: "의료 장비",
+                icon: "fa-cart-flatbed",
+                exKo: "간호사가 약품 카트를 끌고 이동합니다.",
+                exEn: "The nurse moves around pushing the medical supply cart."
+            },
+            {
+                id: "ward",
+                ko: "입원실 / 병실",
+                en: "Hospital Ward / Patient Room",
+                roman: "ip-won-sil",
+                category: "병원 시설",
+                icon: "fa-door-closed",
+                exKo: "501호 입원실은 복도 끝에 있습니다.",
+                exEn: "Ward room 501 is located at the end of the hallway."
+            }
+        ];
+
+        // App State
+        let selectedItem = null;
+        let currentQuizIndex = 0;
+        let quizScore = 0;
+        let currentQuizData = [];
+
+        // Speech Synthesis Engine Integration
+        function speak(text, lang = 'ko-KR') {
+            if (!('speechSynthesis' in window)) {
+                alert("이 브라우저는 음성 합성을 지원하지 않습니다.");
+                return;
+            }
+            // Cancel ongoing speech
+            window.speechSynthesis.cancel();
+
+            const utterance = new SpeechSynthesisUtterance(text);
+            utterance.lang = lang;
+            utterance.rate = 0.9; // Slightly slower for language learners
+            window.speechSynthesis.speak(utterance);
+        }
+
+        function speakCurrent(langType) {
+            if (!selectedItem) return;
+            if (langType === 'ko') {
+                speak(selectedItem.ko, 'ko-KR');
+            } else {
+                speak(selectedItem.en, 'en-US');
+            }
+        }
+
+        // Navigation Handler
+        function switchTab(tabName) {
+            const tabs = ['explore', 'list', 'quiz'];
+            tabs.forEach(tab => {
+                const view = document.getElementById(`view-${tab}`);
+                const button = document.getElementById(`tab-${tab}`);
+                if (tab === tabName) {
+                    view.classList.remove('hidden');
+                    button.className = "px-4 py-1.5 rounded-lg text-sm font-semibold transition-all bg-white text-blue-700 shadow-sm";
+                } else {
+                    view.classList.add('hidden');
+                    button.className = "px-4 py-1.5 rounded-lg text-sm font-semibold transition-all text-slate-600 hover:text-slate-900";
+                }
+            });
+
+            if (tabName === 'list') {
+                renderVocabList();
+            } else if (tabName === 'quiz') {
+                startQuiz();
+            }
+        }
+
+        // Item Selection Logic for Interactive Scene
+        function selectItem(itemId) {
+            const item = dictionaryData.find(d => d.id === itemId);
+            if (!item) return;
+
+            selectedItem = item;
+
+            // Show word details
+            document.getElementById('placeholder-state').classList.add('hidden');
+            document.getElementById('word-info').classList.remove('hidden');
+
+            document.getElementById('word-category').innerText = item.category;
+            document.getElementById('word-ko').innerText = item.ko;
+            document.getElementById('word-roman').innerText = `[ ${item.roman} ]`;
+            document.getElementById('word-en').innerText = item.en;
+            document.getElementById('word-ex-ko').innerText = item.exKo;
+            document.getElementById('word-ex-en').innerText = item.exEn;
+
+            // Automatically pronounce in Korean on selection
+            speak(item.ko, 'ko-KR');
+        }
+
+        // Render Vocabulary List Grid
+        function renderVocabList(items = dictionaryData) {
+            const container = document.getElementById('vocab-grid');
+            container.innerHTML = '';
+
+            items.forEach(item => {
+                const card = document.createElement('div');
+                card.className = "bg-white p-5 rounded-2xl border border-slate-200 shadow-sm hover:shadow-md transition-all flex flex-col justify-between";
+                card.innerHTML = `
+                    <div>
+                        <div class="flex items-center justify-between mb-3">
+                            <span class="text-xs font-semibold px-2.5 py-1 bg-slate-100 text-slate-600 rounded-full">${item.category}</span>
+                            <div class="w-8 h-8 rounded-lg bg-blue-50 text-blue-600 flex items-center justify-center text-sm">
+                                <i class="fa-solid ${item.icon}"></i>
+                            </div>
+                        </div>
+                        <h3 class="text-lg font-bold text-slate-900">${item.ko}</h3>
+                        <p class="text-xs text-slate-400 italic mb-1">[ ${item.roman} ]</p>
+                        <p class="text-sm font-medium text-slate-700 mb-3">${item.en}</p>
+                    </div>
+                    <div class="pt-3 border-t border-slate-100 flex items-center justify-between">
+                        <button onclick="speak('${item.ko}', 'ko-KR')" class="text-xs font-semibold text-blue-600 hover:text-blue-800 flex items-center space-x-1">
+                            <i class="fa-solid fa-volume-high"></i>
+                            <span>한국어 발음</span>
+                        </button>
+                        <button onclick="speak('${item.en}', 'en-US')" class="text-xs font-semibold text-slate-500 hover:text-slate-700 flex items-center space-x-1">
+                            <i class="fa-solid fa-volume-low"></i>
+                            <span>영어 발음</span>
+                        </button>
+                    </div>
+                `;
+                container.appendChild(card);
+            });
+        }
+
+        function filterWords() {
+            const query = document.getElementById('search-input').value.toLowerCase();
+            const filtered = dictionaryData.filter(item => 
+                item.ko.toLowerCase().includes(query) || 
+                item.en.toLowerCase().includes(query) ||
+                item.roman.toLowerCase().includes(query)
+            );
+            renderVocabList(filtered);
+        }
+
+        // Quiz System Functions
+        function startQuiz() {
+            quizScore = 0;
+            currentQuizIndex = 0;
+            // Shuffle array
+            currentQuizData = [...dictionaryData].sort(() => Math.random() - 0.5);
+            loadQuizQuestion();
+        }
+
+        function loadQuizQuestion() {
+            if (currentQuizIndex >= currentQuizData.length) {
+                // Quiz completed state
+                document.getElementById('quiz-question').innerText = "퀴즈 완료!";
+                document.getElementById('quiz-hint').innerText = `최종 점수: ${quizScore} / ${currentQuizData.length}`;
+                document.getElementById('quiz-options').innerHTML = `
+                    <button onclick="startQuiz()" class="col-span-2 py-3 bg-blue-600 text-white font-bold rounded-xl shadow-md hover:bg-blue-700 transition-all">
+                        다시 도전하기
+                    </button>
+                `;
+                return;
+            }
+
+            const current = currentQuizData[currentQuizIndex];
+            document.getElementById('quiz-progress').innerText = `문제 ${currentQuizIndex + 1} / ${currentQuizData.length}`;
+            document.getElementById('quiz-score').innerText = quizScore;
+            document.getElementById('quiz-question').innerText = current.en;
+            document.getElementById('quiz-hint').innerText = `카테고리: ${current.category}`;
+
+            // Generate choices (1 correct + 3 distractors)
+            let options = [current];
+            const remaining = dictionaryData.filter(d => d.id !== current.id);
+            const shuffledRemaining = remaining.sort(() => Math.random() - 0.5).slice(0, 3);
+            options = options.concat(shuffledRemaining).sort(() => Math.random() - 0.5);
+
+            const optionsContainer = document.getElementById('quiz-options');
+            optionsContainer.innerHTML = '';
+
+            options.forEach(opt => {
+                const btn = document.createElement('button');
+                btn.className = "w-full py-3.5 px-4 bg-slate-50 hover:bg-blue-50 border border-slate-200 hover:border-blue-300 rounded-xl font-bold text-slate-800 text-base transition-all text-left flex items-center justify-between group";
+                btn.innerHTML = `
+                    <span>${opt.ko}</span>
+                    <i class="fa-regular fa-circle text-slate-300 group-hover:text-blue-500"></i>
+                `;
+                btn.onclick = () => checkAnswer(opt.id, current.id, btn);
+                optionsContainer.appendChild(btn);
+            });
+        }
+
+        function speakQuizWord() {
+            const current = currentQuizData[currentQuizIndex];
+            if (current) {
+                speak(current.en, 'en-US');
+            }
+        }
+
+        function checkAnswer(selectedId, correctId, btnElement) {
+            const allBtns = document.getElementById('quiz-options').children;
+            for (let btn of allBtns) {
+                btn.disabled = true;
+            }
+
+            if (selectedId === correctId) {
+                quizScore++;
+                btnElement.className = "w-full py-3.5 px-4 bg-emerald-500 text-white font-bold rounded-xl text-base transition-all text-left flex items-center justify-between";
+                btnElement.innerHTML += `<i class="fa-solid fa-circle-check text-white"></i>`;
+                speak(currentQuizData[currentQuizIndex].ko, 'ko-KR');
+            } else {
+                btnElement.className = "w-full py-3.5 px-4 bg-rose-500 text-white font-bold rounded-xl text-base transition-all text-left flex items-center justify-between";
+                btnElement.innerHTML += `<i class="fa-solid fa-circle-xmark text-white"></i>`;
+            }
+
+            document.getElementById('quiz-score').innerText = quizScore;
+        }
+
+        function nextQuizQuestion() {
+            currentQuizIndex++;
+            loadQuizQuestion();
+        }
+
+        // Initialize App on DOM Load
+        window.onload = function() {
+            renderVocabList();
+        };
+    </script>
+</body>
+</html>
